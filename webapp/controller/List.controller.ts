@@ -9,7 +9,6 @@ import "moment-timezone";
 import MessageToast from "sap/m/MessageToast";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import ResourceModel from "sap/ui/model/resource/ResourceModel";
-import Device from "sap/ui/Device";
 
 /**
  * @namespace miyasuta.rssreader.controller
@@ -43,7 +42,7 @@ export default class List extends Controller {
         //@ts-ignore
         const xmlModel = new XMLModel();
         xmlModel.loadData(this._getFeedUrl());
-        xmlModel.setNameSpace("http://purl.org/dc/elements/1.1/","dc");
+        // xmlModel.setNameSpace("http://purl.org/dc/elements/1.1/","dc");
         this.getView()?.setModel(xmlModel);
         
 
