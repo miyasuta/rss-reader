@@ -2,6 +2,22 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
-        <content />
+        <headerContent>
+			<Button id="_IDGenButton1" icon="sap-icon://synchronize" press="onSyncrhonize"/>
+		</headerContent>
+        <content>
+            <List id="_IDGenList1"
+                items="{/channel/item}"
+                mode="SingleSelectMaster"
+                selectionChange="onSelect">
+                <FeedListItem id="_IDGenFeedListItem1"
+                    icon="sap-icon://write-new-document"
+                    info="{path:'dc:creator/text()'}"
+                    timestamp="{path:'dc:date/text()', formatter: '.formatTimestamp'}"
+                    text="{title/text()}"
+                    >
+                </FeedListItem>
+            </List>
+        </content>
     </Page>
 </mvc:View>

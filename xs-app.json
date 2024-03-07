@@ -3,10 +3,9 @@
   "authenticationMethod": "route",
   "routes": [
     {
-      "source": "^undefined/(.*)$",
-      "target": "undefined/$1",
+      "source": "^/khhcw49343/(.*)$",
       "destination": "rss",
-      "authenticationType": "xsuaa",
+      "authenticationType": "none",
       "csrfProtection": false
     },
     {
