@@ -65,12 +65,18 @@ resources:
       HTML5Runtime_enabled: true
       init_data:
         instance:
-          destinations:
+          destinations:      
           - Authentication: NoAuthentication
             Name: ui5
             ProxyType: Internet
             Type: HTTP
             URL: https://ui5.sap.com
+          - Authentication: NoAuthentication
+            Name: rss
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://community.sap.com
+            HTML5.DynamicDestination: true            
           existing_destinations_policy: update
       version: 1.0.0
     service: destination
