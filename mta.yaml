@@ -71,8 +71,8 @@ resources:
             ProxyType: Internet
             Type: HTTP
             URL: https://ui5.sap.com
-          - Authentication: NoAuthentication
-            Name: rss
+          - Name: rss
+            Authentication: NoAuthentication
             ProxyType: Internet
             Type: HTTP
             URL: https://community.sap.com

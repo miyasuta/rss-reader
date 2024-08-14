@@ -1,9 +1,0 @@
-#
-#Wed Apr 03 10:36:01 UTC 2024
-URL=https\://community.sap.com
-Name=rss
-HTML5.DynamicDestination=true
-ProxyType=Internet
-Type=HTTP
-WebIDEEnabled=true
-Authentication=NoAuthentication

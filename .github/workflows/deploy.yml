@@ -1,0 +1,28 @@
+name: Deploy
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 
+
+      - name: Install MTA Build tool
+        run: npm install -g mbt
+
+      - name: Install dependency
+        run: npm install
+
+      - name: Build MTA
+        run: mbt build -p cf
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mta
+          path: ./mta_archives/github-action_1.0.0.mtar
