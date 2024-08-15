@@ -5,8 +5,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v3      
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
@@ -26,3 +25,27 @@ jobs:
         with:
           name: mta
           path: ./mta_archives/mta.tar
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        with:
+          name: mta
+          uses: actions/download-artifact@v4
+          with:
+            name: mta
+            path: ./
+
+      - name: Deploy to Cloud Foundry
+        uses: citizen-of-planet-earth/cf-cli-action@v2
+        with:
+          cf_api: ${{ vars.CF_API }}
+          cf_username: ${{ secrets.CF_USER }}
+          cf_password: ${{ secrets.CF_PASSWORD }}
+          cf_org: ${{ vars.CF_ORG }}
+          cf_space: ${{ vars.CF_SPACE }}
+          command: deploy ./mta.tar
+
+
