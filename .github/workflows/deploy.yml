@@ -37,7 +37,7 @@ jobs:
           path: ./
 
       - name: Deploy to Cloud Foundry
-        uses: citizen-of-planet-earth/cf-cli-action@v2
+        uses: guerric-p/cf-cli-action@v1
         with:
           cf_api: ${{ vars.CF_API }}
           cf_username: ${{ secrets.CF_USER }}
