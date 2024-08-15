@@ -37,7 +37,7 @@ jobs:
           path: ./
 
       - name: Deploy to Cloud Foundry
-        uses: guerric-p/cf-cli-action@v1
+        uses: miyasuta/cf-cli-action@master
         with:
           cf_api: ${{ vars.CF_API }}
           cf_username: ${{ secrets.CF_USER }}
