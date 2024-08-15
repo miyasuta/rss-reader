@@ -31,12 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
+        uses: actions/download-artifact@v4
         with:
           name: mta
-          uses: actions/download-artifact@v4
-          with:
-            name: mta
-            path: ./
+          path: ./
 
       - name: Deploy to Cloud Foundry
         uses: citizen-of-planet-earth/cf-cli-action@v2
