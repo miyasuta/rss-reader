@@ -9,6 +9,7 @@ import "moment-timezone";
 import MessageToast from "sap/m/MessageToast";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import ResourceModel from "sap/ui/model/resource/ResourceModel";
+import JSONModel from "sap/ui/model/json/JSONModel";
 
 /**
  * @namespace miyasuta.rssreader.controller
@@ -17,6 +18,12 @@ export default class List extends Controller {
 
     /*eslint-disable @typescript-eslint/no-empty-function*/
     public onInit(): void {
+        // set initial count
+        const searchModel = new JSONModel({
+            count: 20
+        });
+        this.getView()?.setModel(searchModel, "searchModel");
+
         this._initializeModel();
     }
 
@@ -38,13 +45,11 @@ export default class List extends Controller {
     }
 
     private _initializeModel(): void {
-        this.getView()?.setBusy(true);
+        // this.getView()?.setBusy(true);
         //@ts-ignore
         const xmlModel = new XMLModel();
-        xmlModel.loadData(this._getFeedUrl());
-        // xmlModel.setNameSpace("http://purl.org/dc/elements/1.1/","dc");
-        this.getView()?.setModel(xmlModel);
-        
+        // xmlModel.loadData(this._getFeedUrl());
+        this.getView()?.setModel(xmlModel);        
 
         xmlModel.attachRequestCompleted(()=> {
             this.getView()?.setBusy(false);
@@ -56,7 +61,12 @@ export default class List extends Controller {
     }
 
     private _getFeedUrl(): string {
-        return this._getBaseURL() + '/khhcw49343/rss/Community?interaction.style=blog&feeds.replies=false&count=100';
+        const count = this.getView()?.getModel("searchModel")?.getProperty("/count");
+        let query = '/khhcw49343/rss/Community?interaction.style=blog&feeds.replies=false'
+        if (count) {
+            query = query + `&count=${count}`;
+        }
+        return this._getBaseURL() + query;        
     }
     
     private _getBaseURL(): string{
