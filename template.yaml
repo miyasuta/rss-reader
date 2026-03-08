@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: RSS Reader
+
+Resources:
+  Frontend:
+    Type: AWS::S3::Bucket
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt Frontend.RegionalDomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOAI}"
+          - Id: SapCommunityRssFeedOrigin
+            DomainName: community.sap.com
+            CustomOriginConfig:
+              HTTPSPort: 443
+              OriginProtocolPolicy: https-only
+          - Id: Sapui5ResourcesOrigin
+            DomainName: ui5.sap.com
+            CustomOriginConfig:
+              HTTPSPort: 443
+              OriginProtocolPolicy: https-only              
+        CacheBehaviors:
+          - PathPattern: /khhcw49343/*
+            TargetOriginId: SapCommunityRssFeedOrigin
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad    
+          - PathPattern: /resources/*
+            TargetOriginId: Sapui5ResourcesOrigin
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad        
+
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6            
+
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: OAI for Frontend S3 Bucket    
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Frontend
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource: !Sub "arn:aws:s3:::${Frontend}/*"
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOAI.S3CanonicalUserId    
+
+Outputs:
+  CloudFrontURL:
+    Description: CloudFront distribution URL
+    Value: !Sub "https://${CloudFrontDistribution.DomainName}"
+  FrontendBucket:
+    Description: S3 bucket for frontend hosting
+    Value: !Ref Frontend

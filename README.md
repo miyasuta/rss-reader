@@ -33,4 +33,65 @@ Read RSS feed  for SAP Commuity Blogs
 
 1. Active NodeJS LTS (Long Term Support) version and associated supported NPM version.  (See https://nodejs.org)
 
+---
+
+## Architecture
+
+### Cloud Foundry (BTP)
+
+```
+Browser → BTP App Router
+              ├── /resources/*   → ui5 destination → ui5.sap.com
+              ├── /rss/*         → rss destination  → community.sap.com
+              └── /*             → HTML5 Apps Repository
+```
+
+### AWS
+
+```
+Browser → CloudFront
+              ├── /resources/*   → ui5.sap.com (UI5 framework)
+              ├── /khhcw49343/*  → community.sap.com (RSS feed)
+              └── /*             → S3 (UI5 static files)
+```
+
+---
+
+## Deployment
+
+### Cloud Foundry (BTP)
+
+```bash
+npm run build:mta
+cf deploy mta_archives/*.mtar
+```
+
+### AWS
+
+#### First time
+
+```bash
+# 1. Build UI5 app
+npm run build
+
+# 2. Deploy infrastructure (--guided for first time only)
+sam deploy --guided
+
+# 3. Upload to S3 (bucket name shown in FrontendBucket output)
+npm run deploy-s3
+```
+
+#### Subsequent deployments
+
+```bash
+# When infrastructure changes
+npm run build
+npm run deploy-sam
+npm run deploy-s3
+
+# When only UI5 code changes
+npm run build
+npm run deploy-s3
+```
+
 
